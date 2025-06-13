@@ -1,12 +1,68 @@
 <!DOCTYPE html>
 <html lang="ja">
-    <head>
-        <meta charset="utf-8">
-        <title>Gitチュートリアル</title>
-    </head>
-    <body>
-        <h1>はじめてのバージョン管理</h1>
-        <p>Gitを使ってバージョン管理する。</p>
-         <img src="git-logo.png" alt="git logo">
-    </body>
+<head>
+    <meta charset="utf-8">
+    <title>Simple Twitter Clone</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+        }
+        #tweetForm {
+            margin-bottom: 1rem;
+        }
+        #tweets {
+            list-style: none;
+            padding: 0;
+        }
+        .tweet {
+            border-bottom: 1px solid #ddd;
+            padding: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>シンプルTwitterクローン</h1>
+    <form id="tweetForm">
+        <input type="text" id="tweetInput" placeholder="いまどうしてる？" required>
+        <button type="submit">ツイート</button>
+    </form>
+    <ul id="tweets"></ul>
+
+    <script>
+    const tweetsEl = document.getElementById('tweets');
+    const inputEl = document.getElementById('tweetInput');
+
+    function loadTweets() {
+        tweetsEl.innerHTML = '';
+        const tweets = JSON.parse(localStorage.getItem('tweets') || '[]');
+        tweets.forEach(text => addTweetElement(text));
+    }
+
+    function saveTweet(text) {
+        const tweets = JSON.parse(localStorage.getItem('tweets') || '[]');
+        tweets.unshift(text);
+        localStorage.setItem('tweets', JSON.stringify(tweets));
+    }
+
+    function addTweetElement(text) {
+        const li = document.createElement('li');
+        li.className = 'tweet';
+        li.textContent = text;
+        tweetsEl.prepend(li);
+    }
+
+    document.getElementById('tweetForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const text = inputEl.value.trim();
+        if (text) {
+            saveTweet(text);
+            addTweetElement(text);
+            inputEl.value = '';
+        }
+    });
+
+    loadTweets();
+    </script>
+</body>
 </html>
